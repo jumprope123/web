@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finshot.web.mapper.LoginMapper">
+    <resultMap id="boardResult" type="com.finshot.web.vo.LoginVO">
+        <result property="userid" column="userid"/>
+        <result property="nickname" column="nickname"/>
+        <result property="password1" column="password"/>
+        <result property="passwordcheck" column="passwordcheck"/>
+    </resultMap>
+
+
+    <insert id="inputData" statementType="PREPARED" parameterType="com.finshot.web.vo.LoginVO">
+        insert into login (userid, nickname, password, passwordcheck) VALUES (#{userid}, #{nickname}, #{password}, #{passwordcheck});
+    </insert>
+
+    <select id="checkId" statementType="PREPARED" parameterType="String" resultType="int">
+        select count(userid) from login where userid = #{userid};
+    </select>
+
+    <select id="readOneMember" statementType="PREPARED" parameterType="com.finshot.web.vo.LoginVO" resultType="com.finshot.web.vo.LoginVO">
+        select * from login where userid = #{userid};
+    </select>
+
+    <select id="checkEncodedPassword" statementType="PREPARED" parameterType="String" resultType="String">
+        select password from login where userid = #{userid};
+    </select>
+
+    <update id="changeNick" statementType="PREPARED" parameterType="com.finshot.web.vo.LoginVO">
+        update login set nickname = #{nickname} where userid = #{userid};
+    </update>
+
+    <update id="changePassword" statementType="PREPARED" parameterType="com.finshot.web.vo.LoginVO">
+        update login set password = #{password}, passwordcheck = #{passwordcheck} where userid = #{userid};
+    </update>
+
+    <select id="getUserData" statementType="PREPARED" parameterType="String" resultType="com.finshot.web.vo.LoginVO">
+        select * from login where userid = #{userid};
+    </select>
+</mapper>

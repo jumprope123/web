@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finshot.web.mapper.BoardMapper">
+    <resultMap id="boardResult" type="com.finshot.web.vo.WriteVO">
+        <result property="boardno" column="boardno"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="title" column="title"/>
+        <result property="textforwrite" column="textforwrite"/>
+        <result property="readcnt" column="readcnt"/>
+        <result property="regdate" column="regdate"/>
+        <result property="modidate" column="modidate"/>
+        <result property="activate" column="activate"/>
+    </resultMap>
+
+    <update id="delOneData" statementType="PREPARED" parameterType="int">
+        update board set activate = false where boardno = #{boardno};
+    </update>
+
+    <select id="readAllData" statementType="PREPARED" resultType="com.finshot.web.vo.WriteVO" parameterType="int">
+        select * from board where activate = true order by boardno asc limit 10 offset #{snum};
+    </select>
+
+    <select id="readAllDataCnt" statementType="PREPARED" resultType="int">
+        select count(boardno) from board where activate = true;
+    </select>
+
+    <select id="readFindData" statementType="PREPARED" resultType="com.finshot.web.vo.WriteVO" parameterType="map">
+        select * from board where ${findtype} like #{findkey} AND activate = true order by boardno asc limit 10 offset #{snum};
+    </select>
+
+    <select id="readFindCnt" statementType="PREPARED" resultType="int" parameterType="com.finshot.web.vo.WriteVO">
+        select count(boardno) from board where ${findtype} like #{findkey} AND activate = true;
+    </select>
+
+    <select id="checkPasswd" statementType="PREPARED" parameterType="int" resultType="String">
+        select password from board where boardno = #{boardno};
+    </select>
+
+    <update id="updateData" statementType="PREPARED" parameterType="com.finshot.web.vo.WriteVO">
+        update board set username = #{username}, password = #{password}, title = #{title}, textforwrite = #{textforwrite}, modidate = current_timestamp where boardno = #{boardno};
+    </update>
+
+    <select id="readOneCnt" statementType="PREPARED" parameterType="int" resultType="com.finshot.web.vo.WriteVO">
+        select * from board where boardno = #{boardno};
+    </select>
+
+    <update id="addViewCnt" statementType="PREPARED" parameterType="int">
+        update board set readcnt = readcnt + 1 where boardno = #{boardno};
+    </update>
+
+    <insert id="inputData" statementType="PREPARED" parameterType="com.finshot.web.vo.WriteVO">
+        insert into board (username, password, title, textforwrite, userid, readonlymember) values (#{username}, #{password}, #{title}, #{textforwrite}, #{userid}, #{readonlymember})
+    </insert>
+
+    <select id="readOneData" statementType="PREPARED" parameterType="int" resultType="com.finshot.web.vo.WriteVO">
+        select * from board where boardno = #{boardno};
+    </select>
+
+    <select id="passwdCheck" statementType="PREPARED" parameterType="int" resultType="String">
+        select password from board where boardno = #{boardno};
+    </select>
+
+    <update id="modiData" statementType="PREPARED" parameterType="com.finshot.web.vo.WriteVO">
+        update board set username = #{username} , password = #{password} , title = #{title} , textforwrite = #{textforwrite} , modidate = current_timestamp where boardno = #{boardno} ;
+    </update>
+
+</mapper>
